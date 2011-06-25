@@ -1,0 +1,54 @@
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>HTML5 Canvas Experiment 01</title>
+    <style></style>
+  </head>
+  <body>
+    <div id="preload"><h2>Loading image...<h2></div>
+    <div id="app" style="display:none">
+      <div>
+        <input id="num-input" type="text" value="20"/><button id="toggle-btn">Start</button>
+      </div>
+      <canvas id="draw-canvas" width="1024" height="768">
+        <p>Sorr, buy your browser does not support the HTML5 canvas element.</p>
+      </canvas>
+      <canvas id="source-canvas" width="1024" height="768" >
+        <p>Sorr, buy your browser does not support the HTML5 canvas element.</p>
+      </canvas>
+    </div>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="../../src/Class.js"></script>
+    <script type="text/javascript" src="../../src/Vector2D.js"></script>
+    <script type="text/javascript" src="../../src/Vehicle.js"></script>
+    <script type="text/javascript" src="../../src/SteeredVehicle.js"></script>
+    <script type="text/javascript" src="Utils.js"></script>
+    <script type="text/javascript" src="App.js"></script>
+    <script>
+      var app = new App(document.getElementById('draw-canvas'),document.getElementById('source-canvas'));
+      var i = new Image();
+      i.onload = function() {
+        app.sContext.drawImage(i,0,0)
+        $("#toggle-btn").click(function(){
+          if(!app.painting) {
+            app.clearVehicles();
+            app.clearCanvas();
+            var num = parseInt($("#num-input").val());
+            if(!isNaN(num)) {
+              app.addVehicles(num);
+              app.startPaint();
+              $(this).text("Stop");
+            }
+          } else {
+            app.stopPaint();
+            $(this).text("Start");
+          }
+        });
+        $("#preload").hide();
+        $("#app").show();
+      };
+      i.src = "Penguins.jpg";
+    </script>
+  </body>
+</html>
