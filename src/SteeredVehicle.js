@@ -1,5 +1,17 @@
 /**
- * SteeredVehicle is an extension of Vehicle which adds basic steering methods
+ * SteeredVehicle is an extension of Vehicle which adds basic steering methods.
+ * A steered vehicle can be configured with the following additional properties:
+ * 
+ * Maximum Forece: vehicle.maxForce = Number (default=1)
+ * Arrival Threshold: vehicle.arrivalThreshold = Number (default=100)
+ * Wander Distance: vehicle.wanderDistance = Number (default=10)
+ * Wander Radius: vehicle.wanderRadius = Number (default=5)
+ * Wander Range: vehicle.wanderRange = Number (default=1)
+ * Path Threshold: vehicle.pathThreshold = Number (default=20)
+ * Avoid Distance: vehicle.avoidDistance = Number (default=300)
+ * Avoid Buffer: vehicle.avoidBuffer = Number (defualt=20)
+ * In Sight Distance: vehicle.inSightDist = Number (default=200)
+ * Too Close Distance: vehicle.tooCloseDist = Number (default=60)
  */
 var SteeredVehicle = Vehicle.extend({
   init: function() {
