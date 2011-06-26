@@ -1,23 +1,33 @@
 <html>
+  
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>HTML5 Canvas Experiment 01</title>
     <style></style>
   </head>
+  
   <body>
+  	<!-- This is shown while the image loads. -->
     <div id="preload"><h2>Loading image...<h2></div>
+    	
+    <!-- App container -->
     <div id="app" style="display:none">
+      <!-- Input Area -->
       <div>
         <input id="num-input" type="text" value="20"/><button id="toggle-btn">Start</button>
       </div>
+      <!-- Drawing Canvas -->
       <canvas id="draw-canvas" width="1024" height="768">
         <p>Sorr, buy your browser does not support the HTML5 canvas element.</p>
       </canvas>
+      <!-- Source Canvas -->
       <canvas id="source-canvas" width="1024" height="768" >
         <p>Sorr, buy your browser does not support the HTML5 canvas element.</p>
       </canvas>
     </div>
+    
+    <!-- Scripts -->
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
     <script type="text/javascript" src="../../src/Class.js"></script>
     <script type="text/javascript" src="../../src/Vector2D.js"></script>
@@ -25,12 +35,18 @@
     <script type="text/javascript" src="../../src/SteeredVehicle.js"></script>
     <script type="text/javascript" src="Utils.js"></script>
     <script type="text/javascript" src="App.js"></script>
+    
     <script>
+   	  // Create a new app specifying the drawing and source canvas.
       var app = new App(document.getElementById('draw-canvas'),document.getElementById('source-canvas'));
+      // Load the image to use as a color source.
       var i = new Image();
+      // We need to do some things once the image is loaded
       i.onload = function() {
-        app.sContext.drawImage(i,0,0)
-        $("#toggle-btn").click(function(){
+      	// Draw the image in the source canvas
+        app.sContext.drawImage(i,0,0) 
+        // Activate the toggle button
+        $("#toggle-btn").click(function(){ 
           if(!app.painting) {
             app.clearVehicles();
             app.clearCanvas();
@@ -48,7 +64,10 @@
         $("#preload").hide();
         $("#app").show();
       };
+      // Load the image
       i.src = "Penguins.jpg";
     </script>
+
   </body>
+
 </html>

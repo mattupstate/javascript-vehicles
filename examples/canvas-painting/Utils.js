@@ -1,4 +1,10 @@
+/**
+ * General utilities.
+ */
 var Utils = {
+  /**
+   * Generates a random color.
+   */
   randomColor: function () {
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
@@ -7,9 +13,15 @@ var Utils = {
     }
     return color;
   },
+  /**
+   * Converts RGB color values to a HEX color.
+   */
   RGBtoHex: function(r,g,b) {
     return this.toHex(r)+this.toHex(g)+this.toHex(b);
   },
+  /**
+   * Converts a number value to hexidecimal value.
+   */
   toHex: function toHex(n) {
     if (n==null) return "00";
     n=parseInt(n); if (n==0 || isNaN(n)) return "00";
