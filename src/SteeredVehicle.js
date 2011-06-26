@@ -1,3 +1,6 @@
+/**
+ * SteeredVehicle is an extension of Vehicle which adds basic steering methods
+ */
 var SteeredVehicle = Vehicle.extend({
   init: function() {
     this._super();
@@ -16,6 +19,10 @@ var SteeredVehicle = Vehicle.extend({
     this.tooCloseDist = 60;
     this.hasArrived = false;
   },
+  /**
+   * Update the vehicle's position and rotation according to it's velocity and
+   * steering forces.
+   */
   update: function() {
     this.steeringForce.truncate(this.maxForce);
     this.steeringForce = this.steeringForce.divide(this.mass);
@@ -23,6 +30,9 @@ var SteeredVehicle = Vehicle.extend({
     this.steeringForce = new Vector2D(0,0);
     this._super();
   },
+  /**
+   * Eagerly steers and follows the vehicle towards the specified target. 
+   */
   seek: function(target) {
     var desiredVelocity = target.subtract(this.position);
     desiredVelocity.normalize();
@@ -30,6 +40,10 @@ var SteeredVehicle = Vehicle.extend({
     var force = desiredVelocity.subtract(this.velocity);
     this.steeringForce = this.steeringForce.add(force);
   },
+  /**
+   * Steers the vehicle directly away form the specified target, attempting 
+   * to avoid the target at all times.
+   */
   flee: function(target) {
     var desiredVelocity = target.subtract(this.position);
     desiredVelocity.normalize();
@@ -37,6 +51,10 @@ var SteeredVehicle = Vehicle.extend({
     var force = desiredVelocity.subtract(this.velocity);
     this.steeringForce = this.steeringForce.subtract(force);
   },
+  /**
+   * Steers the vehicle towards the specified target but also eases the 
+   * arrival of the vehicle to match that of the target.
+   */
   arrive: function(target) {
     var desiredVelocity = target.subtract(this.position);
     desiredVelocity.normalize();
@@ -51,16 +69,27 @@ var SteeredVehicle = Vehicle.extend({
     var force = desiredVelocity.subtract(this.velocity);
     this.steeringForce = this.steeringForce.add(force);
   },
+  /**
+   * Steers the vehicle towards a predicted position based on the target's
+   * position and velocity, effectively making the vehicle 'smarter'.
+   */
   pursue: function(target) {
     var lookAheadTime = this.position.dist(target.position) / this.maxSpeed;
     var predictedTarget = target.position.add(target.velocity.multiply(lookAheadTime));
     this.seek(predictedTarget);
   },
+  /**
+   * Steers the vehicle away from a predicted position based on the target's
+   * position and velocity, effectively making the vehicle 'smarter'
+   */
   evade: function(target) {
     var lookAheadTime = this.position.dist(target.position) / this.maxSpeed;
     var predictedTarget = target.position.subtract(target.velocity.multiply(lookAheadTime));
     this.flee(predictedTarget);
   },
+  /**
+   * Steers the vehicle in a smooth, slightly random manner.
+   */
   wander: function() {
     var center = this.velocity.clone().normalize().multiply(this.wanderDistance);
     var offset = new Vector2D(0,0);
@@ -70,6 +99,9 @@ var SteeredVehicle = Vehicle.extend({
     var force = center.add(offset);
     this.steeringForce = this.steeringForce.add(force);
   },
+  /**
+   * Steers the vehicle in a direction away from a specified list of other vehicles.
+   */
   avoid: function(vehicles) {
     var i = 0;
     var amt = vehicles.length;
@@ -77,40 +109,27 @@ var SteeredVehicle = Vehicle.extend({
       var circle = vehicles[i];
       var heading = this.velocity.clone().normalize();
       
-      // vector between circle and vehicle:
       var difference = circle.position.subtract(this.position);
       var dotProd = difference.dotProd(heading);
       
-      // if circle is in front of vehicle...
       if(dotProd > 0) {
-        // vector to represent "feeler" arm
         var feeler = heading.multiply(this.avoidDistance);
-        // project difference vector onto feeler
         var projection = heading.multiply(dotProd);
-        // distance from circle to feeler
         var dist = projection.subtract(difference).getLength();
         
-        // if feeler intersects circle (plus buffer),
-        //and projection is less than feeler length,
-        // we will collide, so need to steer
         if(dist < circle.radius + this.avoidBuffer && projection.getLength() < feeler.getLength()) {
-          // calculate a force +/- 90 degrees from vector to circle
           var force = heading.multiply(this.maxSpeed);
           force.setAngle(force.getAngle() + difference.sign(this.velocity) * Math.PI / 2);
-          
-          // scale this force by distance to circle.
-          // the further away, the smaller the force
           force = force.multiply(1.0 - projection.getLength() / feeler.getLength());
-          
-          // add to steering force
           this.steeringForce = this.steeringForce.add(force);
-          
-          // braking force
           this.velocity = this.velocity.multiply(projection.getLength() / feeler.getLength());
         }
       }
     }
   },
+  /**
+   * Steers the vehicle along a specified path.
+   */
   followPath: function(path, loop) {
     var wayPoint = path[this.pathIndex];
     if(wayPoint == undefined) return;
@@ -129,6 +148,10 @@ var SteeredVehicle = Vehicle.extend({
       seek(wayPoint);
     }
   },
+  /**
+   * Steers the vehicle in a flocking/group fashion based on the specified
+   * list of vehicles in the flock/group.
+   */
   flock: function(vehicles) {
     var averageVelocity = this.velocity.clone();
     var averagePosition = new Vector2D(0,0);
@@ -149,6 +172,10 @@ var SteeredVehicle = Vehicle.extend({
       this.steeringForce.add(averageVelocity.subtract(this.velocity));
     }
   },
+  /**
+   * Checks if the specified vehicle is in sight of this vehicle based on the
+   * vehicle's inSightDist property.
+   */
   inSight: function(vehicle) {
     if(this.position.dist(vehicle.position) > this.inSightDist) return false;
     var heading = this.velocity.clone().normalize();
@@ -158,6 +185,10 @@ var SteeredVehicle = Vehicle.extend({
     if(dotProd < 0) return false;
     return true;
   },
+  /**
+   * Determines if the specified vehicle is too close to this vechicle based 
+   * on the vehicle's tooClostDist property.
+   */
   tooClose: function(vehicle) {
     return this.position.dist(vehicle.position) < this.tooCloseDist;
   }
