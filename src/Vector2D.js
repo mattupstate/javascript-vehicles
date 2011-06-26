@@ -1,6 +1,6 @@
 /**
  * Vector2D is an object that represents a two-dimensional vector. It can be
- * used to represent position, velocity, accelleration and more.
+ * used to represent position and forces such as velocity, accelleration and more.
  */
 var Vector2D = Class.extend({
   init: function(x,y){
