@@ -1,6 +1,7 @@
 /**
  * Vector2D is an object that represents a two-dimensional vector. It can be
  * used to represent position and forces such as velocity, accelleration and more.
+ 
  */
 var Vector2D = Class.extend({
   init: function(x,y){
@@ -15,6 +16,7 @@ var Vector2D = Class.extend({
   },
   /**
    * Zero's out the vectory, setting the x and y positions to 0.
+   
    */
   zero: function() {
     this.x = 0;
@@ -23,18 +25,21 @@ var Vector2D = Class.extend({
   },
   /**
    * Flag that denotes if the vector is zeroed or not.
+   
    */
   isZero: function() {
     return this.x == 0 && this.y == 0;
   },
   /**
    * The value of the vector's length squared.
+   
    */
   lengthSQ: function() {
     return this.x*this.x + this.y*this.y;
   },
   /**
    * The vector length (distance between x and y).
+   
    */
   getLength: function() {
     return Math.sqrt(this.lengthSQ());
@@ -49,12 +54,14 @@ var Vector2D = Class.extend({
   },
   /**
    * The vector angle in radians
+   
    */
   getAngle: function() {
     return Math.atan2(this.y, this.x);
   },
   /**
    * Set t he angle in radians
+   
    */
   setAngle: function(val) {
     var len = this.getLength();
@@ -63,6 +70,7 @@ var Vector2D = Class.extend({
   },
   /**
    * Normalizes the vector.
+   
    */
   normalize: function() {
     if(this.getLength() == 0) {
@@ -76,12 +84,14 @@ var Vector2D = Class.extend({
   },
   /**
    * Flag that denotes if the vector is normalized.
+   
    */
   isNormalized: function() {
     return this.getLength() == 1;
   },
   /**
    * Truncate the vector's distance with the specified maximum distance
+   
    */
   truncate: function(max) {
     this.setLength(Math.min(max, this.getLength()));
@@ -89,6 +99,7 @@ var Vector2D = Class.extend({
   },
   /**
    * Invert the vector's direction.
+   
    */
   reverse: function() {
     this.x = -this.x;
@@ -97,12 +108,14 @@ var Vector2D = Class.extend({
   },
   /**
    * Get the vector's dot product.
+   
    */
   dotProd: function(v2) {
     return this.x*v2.x + this.y*v2.y;
   },
   /**
    * Determine the angle between two vectors.
+   
    */
   angleBetween: function(v1,v2) {
     if(!v1.isNormalized()) v1 = v1.clone().normalize();
@@ -111,18 +124,21 @@ var Vector2D = Class.extend({
   },
   /**
    * Sign the vector with the specified vector.
+   
    */
   sign: function(v2) {
     return this.perp().dotProd(v2) < 0 ? -1 : 1;
   },
   /**
    * Get a vector that is perpendicular to this vector.
+   
    */
   perp: function() {
     return new Vector2D(-this.y, this.x);
   },
   /**
    * Get the distance between the specified vector and this vector;
+   
    */
   dist: function(v2) {
     return Math.sqrt(this.distSQ(v2));
@@ -137,6 +153,7 @@ var Vector2D = Class.extend({
   },
   /**
    * Add the sepcified vector this vector. 
+   
    */
   add: function(v2) {
     return new Vector2D(this.x + v2.x, this.y + v2.y);

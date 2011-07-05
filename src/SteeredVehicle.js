@@ -12,6 +12,7 @@
  * Avoid Buffer: vehicle.avoidBuffer = Number (defualt=20)
  * In Sight Distance: vehicle.inSightDist = Number (default=200)
  * Too Close Distance: vehicle.tooCloseDist = Number (default=60)
+ 
  */
 var SteeredVehicle = Vehicle.extend({
   init: function() {
@@ -34,6 +35,7 @@ var SteeredVehicle = Vehicle.extend({
   /**
    * Update the vehicle's position and rotation according to it's velocity and
    * steering forces.
+   
    */
   update: function() {
     this.steeringForce.truncate(this.maxForce);
@@ -44,6 +46,7 @@ var SteeredVehicle = Vehicle.extend({
   },
   /**
    * Eagerly steers and follows the vehicle towards the specified target. 
+   
    */
   seek: function(target) {
     var desiredVelocity = target.subtract(this.position);
@@ -55,6 +58,7 @@ var SteeredVehicle = Vehicle.extend({
   /**
    * Steers the vehicle directly away form the specified target, attempting 
    * to avoid the target at all times.
+   
    */
   flee: function(target) {
     var desiredVelocity = target.subtract(this.position);
@@ -66,6 +70,7 @@ var SteeredVehicle = Vehicle.extend({
   /**
    * Steers the vehicle towards the specified target but also eases the 
    * arrival of the vehicle to match that of the target.
+   
    */
   arrive: function(target) {
     var desiredVelocity = target.subtract(this.position);
@@ -84,6 +89,7 @@ var SteeredVehicle = Vehicle.extend({
   /**
    * Steers the vehicle towards a predicted position based on the target's
    * position and velocity, effectively making the vehicle 'smarter'.
+   
    */
   pursue: function(target) {
     var lookAheadTime = this.position.dist(target.position) / this.maxSpeed;
@@ -93,6 +99,7 @@ var SteeredVehicle = Vehicle.extend({
   /**
    * Steers the vehicle away from a predicted position based on the target's
    * position and velocity, effectively making the vehicle 'smarter'
+   
    */
   evade: function(target) {
     var lookAheadTime = this.position.dist(target.position) / this.maxSpeed;
@@ -101,6 +108,7 @@ var SteeredVehicle = Vehicle.extend({
   },
   /**
    * Steers the vehicle in a smooth, slightly random manner.
+   
    */
   wander: function() {
     var center = this.velocity.clone().normalize().multiply(this.wanderDistance);
@@ -113,6 +121,7 @@ var SteeredVehicle = Vehicle.extend({
   },
   /**
    * Steers the vehicle in a direction away from a specified list of other vehicles.
+   
    */
   avoid: function(vehicles) {
     var i = 0;
@@ -141,6 +150,7 @@ var SteeredVehicle = Vehicle.extend({
   },
   /**
    * Steers the vehicle along a specified path.
+   
    */
   followPath: function(path, loop) {
     var wayPoint = path[this.pathIndex];
@@ -163,6 +173,7 @@ var SteeredVehicle = Vehicle.extend({
   /**
    * Steers the vehicle in a flocking/group fashion based on the specified
    * list of vehicles in the flock/group.
+   
    */
   flock: function(vehicles) {
     var averageVelocity = this.velocity.clone();
@@ -187,6 +198,7 @@ var SteeredVehicle = Vehicle.extend({
   /**
    * Checks if the specified vehicle is in sight of this vehicle based on the
    * vehicle's inSightDist property.
+   
    */
   inSight: function(vehicle) {
     if(this.position.dist(vehicle.position) > this.inSightDist) return false;
@@ -200,6 +212,7 @@ var SteeredVehicle = Vehicle.extend({
   /**
    * Determines if the specified vehicle is too close to this vechicle based 
    * on the vehicle's tooClostDist property.
+   
    */
   tooClose: function(vehicle) {
     return this.position.dist(vehicle.position) < this.tooCloseDist;

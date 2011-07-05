@@ -6,6 +6,7 @@
  * Mass: vehicle.mass = Number (default=1)
  * Bounds: vehicle.bounds = Object (default={x:0, y:0, width:1000, height:1000})
  * Edge Behavior: vehicle.edgeBehavior = String ('WRAP' or 'BOUNCE')
+ 
  */
 var Vehicle = Class.extend({
   init: function() {
@@ -19,6 +20,7 @@ var Vehicle = Class.extend({
   },
   /**
    * Update the vehicle's position and rotation according to it's velocity.
+   
    */
   update: function() {
     this.velocity.truncate(this.maxSpeed);
@@ -32,6 +34,7 @@ var Vehicle = Class.extend({
   },
   /**
    * Wraps the positions the vehicle if it has moved out of the defined bounds.
+   
    */
   wrap: function() {
     if(this.bounds != undefined) {
@@ -43,6 +46,7 @@ var Vehicle = Class.extend({
   },
   /**
    * Bounces the vehicle off the edge of the defined bounds
+   
    */
   bounce: function() {
     if(this.bounds != undefined) {
